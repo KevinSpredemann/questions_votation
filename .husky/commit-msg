@@ -1,0 +1,16 @@
+#!/bin/sh
+
+MSG_FILE=$1
+MSG=$(cat "$MSG_FILE")
+
+PREFIX="HEY-2 "
+
+# Verifica se já tem o prefixo
+case "$MSG" in
+  "$PREFIX"*)
+    exit 0
+    ;;
+  *)
+    echo "$PREFIX$MSG" > "$MSG_FILE"
+    ;;
+esac
