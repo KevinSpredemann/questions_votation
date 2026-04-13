@@ -1,0 +1,26 @@
+#!/bin/sh
+
+echo "🔧 Rodando PHPStan..."
+./vendor/bin/phpstan
+if [ $? -ne 0 ]; then
+  echo "❌ PHPStan encontrou erros. Commit cancelado."
+  exit 1
+fi
+
+# Pega arquivos PHP modificados no stage
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep "\.php$" || true)
+
+# Se não tiver arquivos, sai
+[ -z "$STAGED_FILES" ] && exit 0
+
+echo "🔧 Rodando Laravel Pint nos arquivos..."
+
+for FILE in $STAGED_FILES
+do
+  if [ -f "$FILE" ]; then
+    ./vendor/bin/pint "$FILE"
+    git add "$FILE"
+  fi
+done
+
+echo "✅ Pint finalizado!"
