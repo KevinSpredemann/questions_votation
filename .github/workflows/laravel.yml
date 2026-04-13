@@ -26,8 +26,8 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-    - name: Run package.json
-      run: npm run install
+    - name: Installing package.json
+      run: npm install
     - name: Build Assets
       run: npm run build
     - name: Execute tests (Unit and Feature tests) via Pest
