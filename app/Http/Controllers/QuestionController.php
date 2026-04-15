@@ -14,7 +14,7 @@ class QuestionController extends Controller
             ->create(
                 request()
             ->validate([
-                'question' => ['required'],
+                'question' => ['required', 'min:10'],
             ])
             );
 
