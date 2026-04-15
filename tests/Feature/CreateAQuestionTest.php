@@ -21,6 +21,14 @@ it("should be able to create a new question biggest than 255 characters", functi
 });
 
 it("should check if ends with question mark ?", function () {
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $request = post(route("questions.store"), [
+        "question" => str_repeat('*', 10),
+    ]);
+    $request->assertSessionHasErrors(['question' => 'The question must end with a question mark.']);
+    assertDatabaseCount('questions', 0);
 
 });
 
