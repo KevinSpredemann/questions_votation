@@ -27,7 +27,7 @@ it("should check if ends with question mark ?", function () {
     $request = post(route("questions.store"), [
         "question" => str_repeat('*', 10),
     ]);
-    $request->assertSessionHasErrors(['question' => 'The question must end with a question mark.']);
+    $request->assertSessionHasErrors(['question' => 'The question must end with a question mark (?).']);
     assertDatabaseCount('questions', 0);
 
 });
