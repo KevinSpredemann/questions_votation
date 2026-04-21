@@ -18,5 +18,20 @@ it("should be able to like a question", function () {
         'like'        => 1,
         'unlike'      => 0,
     ]);
+});
 
+it("should not be able to like a question", function () {
+    $user     = User::factory()->create();
+    $question = Question::factory()->create();
+    actingAs($user);
+
+    post(route('question.like', $question))
+    ->assertRedirect();
+
+    assertDatabaseHas('votes', [
+        'user_id'     => $user->id,
+        'question_id' => $question->id,
+        'like'        => 1,
+        'unlike'      => 0,
+    ]);
 });
