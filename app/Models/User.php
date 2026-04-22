@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\{Fillable, Hidden};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+/**
+ * @property int $id
+ */
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -29,5 +33,33 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    /** @return HasMany<Vote, $this> */
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function like(Question $question): void
+    {
+        $this->votes()->updateOrCreate(
+            [   "question_id" => $question->id],
+            [
+                "like"   => 1,
+                "unlike" => 0,
+            ]
+        );
+    }
+
+    public function unlike(Question $question): void
+    {
+        $this->votes()->updateOrCreate(
+            [   "question_id" => $question->id],
+            [
+                "like"   => 0,
+                "unlike" => 1,
+            ]
+        );
     }
 }
