@@ -8,15 +8,36 @@ it("should be able to publish a question", function () {
 
     $user     = User::factory()->create();
     $question = Question::factory()->create([
-        'draft' => true,
+        'draft'      => true,
+        'created_by' => $user->id,
     ]);
 
     actingAs($user);
 
     put(route('questions.publish', $question))
-    ->assertRedirect();
+        ->assertRedirect();
 
     $question->refresh();
 
     expect($question)->draft->toBeFalse();
+});
+
+
+it("should make sure that only the person who has created the question can publish the question", function () {
+    $rightUser = User::factory()->create();
+    $wrongUser = User::factory()->create();
+    $question  = Question::factory()->create([
+        'draft'      => true,
+        'created_by' => $rightUser->id,
+    ]);
+
+    actingAs($wrongUser);
+
+    put(route('questions.publish', $question))
+        ->assertForbidden();
+
+    actingAs($rightUser);
+
+    put(route('questions.publish', $question))
+        ->assertRedirect();
 });

@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function like(Question $question): void
     {
         $this->votes()->updateOrCreate(
-            [   "question_id" => $question->id],
+            ["question_id" => $question->id],
             [
                 "like"   => 1,
                 "unlike" => 0,
@@ -52,10 +52,19 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+    /**
+     * Summary of createdBy
+     * @return HasMany<Question, $this>
+     */
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class, 'created_by');
+    }
+
     public function unlike(Question $question): void
     {
         $this->votes()->updateOrCreate(
-            [   "question_id" => $question->id],
+            ["question_id" => $question->id],
             [
                 "like"   => 0,
                 "unlike" => 1,
