@@ -13,7 +13,7 @@ it("should be able to create a new question biggest than 255 characters", functi
         "question" => str_repeat('*', 260) . '?',
     ]);
 
-    $request->assertRedirect(route('dashboard'));
+    $request->assertRedirect();
     assertDatabaseCount('questions', 1);
     assertDatabaseHas('questions', [
         'question' => str_repeat('*', 260) . '?',
@@ -29,18 +29,25 @@ it("should check if ends with question mark ?", function () {
     ]);
     $request->assertSessionHasErrors(['question' => 'The question must end with a question mark (?).']);
     assertDatabaseCount('questions', 0);
-
 });
 
-it("should have at least 10 characters", function () {
+
+it("should create as a draft all the time", function () {
     $user = User::factory()->create();
     actingAs($user);
 
     $request = post(route("questions.store"), [
-        "question" => str_repeat('*', 8) . '?',
+        "question" => str_repeat('*', 260) . '?',
     ]);
-    $request->assertSessionHasErrors(['question' => __('validation.min.string', ['attribute' => 'question', 'min' => 10])]);
-    assertDatabaseCount('questions', 0);
 
+    assertDatabaseHas('questions', [
+        'question' => str_repeat('*', 260) . '?',
+        'draft'    => true,
+    ]);
+});
 
+it('only authenticated users can create a new question', function () {
+    post(route("questions.store"), [
+        "question" => str_repeat('*', 8) . '?',
+    ])->assertRedirect(route('login'));
 });
