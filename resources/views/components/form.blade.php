@@ -7,7 +7,7 @@
         @method('PUT')
     @endif
 
-    @if ($delete)
+    @if ($delete ?? false)
         @method('DELETE')
     @endif
 

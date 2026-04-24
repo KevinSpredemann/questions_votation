@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -14,6 +15,15 @@ class QuestionController extends Controller
         return view("question.index", [
             'questions' => Auth::user()->questions,
         ]);
+    }
+
+    public function destroy(Question $question): RedirectResponse
+    {
+        $this->authorize('destroy', $question);
+
+        $question->delete();
+
+        return back();
     }
     public function store(): RedirectResponse
     {
