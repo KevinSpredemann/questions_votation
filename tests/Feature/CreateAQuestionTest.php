@@ -13,7 +13,7 @@ it("should be able to create a new question biggest than 255 characters", functi
         "question" => str_repeat('*', 260) . '?',
     ]);
 
-    $request->assertRedirect(route('dashboard'));
+    $request->assertRedirect();
     assertDatabaseCount('questions', 1);
     assertDatabaseHas('questions', [
         'question' => str_repeat('*', 260) . '?',

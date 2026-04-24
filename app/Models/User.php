@@ -14,6 +14,10 @@ use Illuminate\Notifications\Notifiable;
  * @property int $id
  */
 
+/**
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Question[] $questions
+ */
+
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail

@@ -14,6 +14,10 @@
                         class="text-gray-700 dark:text-gray-300 dark:hover:text-white">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('questions.index')" :active="request()->routeIs('questions.index')"
+                        class="text-gray-700 dark:text-gray-300 dark:hover:text-white">
+                        {{ __('My Questions') }}
+                    </x-nav-link>
                 </div>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
@@ -78,6 +82,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('questions.index')">
+                {{ __('My Questions') }}
             </x-responsive-nav-link>
         </div>
     </div>

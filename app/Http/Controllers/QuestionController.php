@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class QuestionController extends Controller
 {
+    public function index(): View
+    {
+        return view("question.index", [
+            'questions' => Auth::user()->questions,
+        ]);
+    }
     public function store(): RedirectResponse
     {
         request()
@@ -28,6 +35,6 @@ class QuestionController extends Controller
             'draft'    => true,
         ]);
 
-        return to_route("dashboard");
+        return back();
     }
 }
