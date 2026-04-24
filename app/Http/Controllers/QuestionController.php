@@ -47,4 +47,8 @@ class QuestionController extends Controller
 
         return back();
     }
+
+    public function edit(Question $question): void
+    {
+    }
 }
