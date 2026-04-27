@@ -23,3 +23,22 @@ it("should return a view", function () {
     get(route('question.edit', $question))
         ->assertViewIs('question.edit');
 });
+
+it("should make sure that only question with status DRAFT can be", function () {
+    $user             = User::factory()->create();
+    $questionNotDraft = Question::factory()->create([
+        'draft'      => false,
+        'created_by' => $user->id,
+    ]);
+    $questionDraft = Question::factory()->create([
+        'draft'      => true,
+        'created_by' => $user->id,
+    ]);
+
+    actingAs($user);
+
+    get(route('question.edit', $questionNotDraft))
+        ->assertForbidden();
+    get(route('question.edit', $questionDraft))
+        ->assertSuccessful();
+});
