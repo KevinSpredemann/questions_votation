@@ -6,7 +6,11 @@ use function Pest\Laravel\{actingAs, get};
 
 it("should be able to open a question edit", function () {
     $user     = User::factory()->create();
-    $question = Question::factory()->for($user, 'createdBy')->create();
+    $question = Question::factory()->create([
+        'draft'      => true,
+        'created_by' => $user->id,
+    ]);
+    ;
 
     actingAs($user);
 
@@ -16,7 +20,10 @@ it("should be able to open a question edit", function () {
 
 it("should return a view", function () {
     $user     = User::factory()->create();
-    $question = Question::factory()->for($user, 'createdBy')->create();
+    $question = Question::factory()->create([
+        'draft'      => true,
+        'created_by' => $user->id,
+    ]);
 
     actingAs($user);
 
