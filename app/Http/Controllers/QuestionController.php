@@ -58,6 +58,19 @@ class QuestionController extends Controller
     public function update(Question $question): RedirectResponse
     {
 
+        request()
+            ->validate([
+                'question' => [
+                    'required',
+                    'min:10',
+                    function (string $attribute, mixed $value, Closure $fail) {
+                        if (!str_ends_with($value, '?')) {
+                            $fail('The question must end with a question mark (?).');
+                        }
+                    }
+                ],
+            ]);
+
         $this->authorize('update', $question);
         $question->question = request('question');
         $question->save();
