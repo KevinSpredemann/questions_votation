@@ -5,6 +5,7 @@ use App\Models\{Question, User};
 use function Pest\Laravel\{actingAs, assertDatabaseCount, assertDatabaseHas, put};
 
 it("should update the question in the database", function () {
+
     $user     = User::factory()->create();
     $question = Question::factory()->create([
         'draft'      => true,
@@ -15,7 +16,7 @@ it("should update the question in the database", function () {
     put(route('question.update', $question), [
         'question' => 'Updated Question?',
     ])
-        ->assertRedirect();
+        ->assertRedirect(route('questions.index'));
 
 
     $question->refresh();
@@ -36,12 +37,14 @@ it("should make sure that only question with status DRAFT can be updated", funct
 
     actingAs($user);
 
-    put(route('question.update', $questionNotDraft))
+    put(route('question.update', $questionNotDraft), [
+        'question' => 'New Question ?',
+    ])
         ->assertForbidden();
     put(route('question.update', $questionDraft), [
-        'question' => 'New Question',
+        'question' => 'New Question ?',
     ])
-        ->assertRedirect();
+        ->assertRedirect(route('questions.index'));
 });
 
 it("should make sure that only the person who has updated the question can update the question", function () {
@@ -53,12 +56,14 @@ it("should make sure that only the person who has updated the question can updat
     ]);
 
     actingAs($wrongUser);
-    put(route('question.update', $question))
+    put(route('question.update', $question), [
+        'question' => 'New Question ?',
+    ])
         ->assertForbidden();
 
     actingAs($rightUser);
     put(route('question.update', $question), [
-        'question' => 'New Question',
+        'question' => 'New Question ?',
     ])
         ->assertRedirect();
 });
