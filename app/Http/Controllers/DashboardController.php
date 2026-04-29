@@ -12,7 +12,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'questions' => Question::withSum('votes', 'like')
                 ->withSum('votes', 'unlike')
-                ->paginate(10),
+                ->paginate(5),
         ]);
     }
 }
